@@ -1,8 +1,6 @@
 fastapi
-uvicorn[standard]
-
-langchain-core
-langchain-groq
-
+uvicorn
+groq
 python-dotenv
 requests
+edge-tts
