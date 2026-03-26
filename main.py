@@ -1,36 +1,22 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-import os
-from dotenv import load_dotenv
-
-from langchain_groq import ChatGroq
-
-load_dotenv()
+from ai import chat_ai
+from memory import add_memory
+from commands import run_command
 
 app = FastAPI()
 
-# Initialize LLM (lightweight, API based)
-llm = ChatGroq(
-    groq_api_key=os.getenv("GROQ_API_KEY"),
-    model_name="llama-3.3-70b-versatile"
-)
-
-# Request model
-class ChatRequest(BaseModel):
-    message: str
-
-# Home route
 @app.get("/")
 def home():
-    return {"status": "FRIDAY is running 🚀"}
+    return {"message": "JARVIS is online 🚀"}
 
-# Chat route
 @app.post("/chat")
-async def chat(req: ChatRequest):
-    try:
-        response = llm.invoke(req.message)
-        return {
-            "reply": response.content
-        }
-    except Exception as e:
-        return {"error": str(e)}
+def chat(message: str):
+    cmd = run_command(message)
+
+    if cmd:
+        return {"response": cmd}
+
+    response = chat_ai(message)
+    add_memory(message, response)
+
+    return {"response": response}
