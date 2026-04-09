@@ -8,7 +8,8 @@ from commands import run_command
 app = FastAPI()
 
 # 👉 This will show your HTML UI
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+# আগের লাইনটি পরিবর্তন করে এটি লিখুন
+app.mount("/", StaticFiles(directory=".", html=True), name="frontend")
 
 
 @app.post("/chat")
